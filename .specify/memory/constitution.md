@@ -1,9 +1,14 @@
 <!--
 Sync Impact Report
-- Version change: 0.0.0 -> 1.0.0
-- Modified principles: N/A (initial constitution scaffold)
-- Added sections: Core Principles, Security and Quality Standards, Review and Delivery Workflow, Governance
-- Removed sections: None
+- Version change: 1.0.0 -> 1.1.0
+- Modified principles:
+  - Specification-First -> Requirements Traceability
+  - Evidence-Driven Delivery -> Harness Integrity and Evidence Preservation
+  - Test-First and Regression Safety -> Automated Deterministic Testing
+  - Reproducible Automation -> Deterministic CLI and Controlled Task State
+  - Simplicity, Traceability, and Safe Change -> Reproducible, Secure, and Maintainable Delivery
+- Added sections: Technology, Security and Data Integrity; Verification, Evidence and Human Review
+- Removed sections: Security and Quality Standards; Review and Delivery Workflow (replaced by expanded sections)
 - Follow-up TODOs: None
 -->
 
@@ -11,47 +16,82 @@ Sync Impact Report
 
 ## Core Principles
 
-### I. Specification-First
-Every change begins with a clear requirement, user-facing outcome, and acceptance criteria. Requirements must be specific enough to test, review, and verify before implementation begins. When scope is ambiguous, the team resolves it in writing before coding, automation, or deployment work starts.
+### I. Deterministic CLI and Controlled Task State
+For identical valid inputs and the same persisted state, the Smart Todo CLI MUST produce
+identical outputs and state changes. Task statuses and allowed transitions MUST follow the
+approved specification. Invalid or unspecified transitions MUST be rejected deterministically.
 
-This rule prevents drift, hidden assumptions, and unsupported implementation. Specification is the source of truth for scope, acceptance, and risk assessment.
+Determinism makes behavior reproducible and enables reliable automated evaluation.
 
-### II. Evidence-Driven Delivery
-All claims about system behavior, correctness, and quality must be backed by observable evidence: tests, logs, harness output, or reproducible verification steps. No claim is accepted without a traceable basis in execution or review evidence.
+### II. Requirements Traceability
+Every implemented feature MUST trace to an approved functional requirement, acceptance
+criterion, and implementation task. These links MUST be recorded in the project artifacts
+before the feature is considered complete. The approved specification is the source of truth
+for scope and expected behavior.
 
-The project treats verification as part of delivery, not an afterthought. Evidence reduces false confidence and makes debugging, review, and handoff more reliable.
+This prevents implementation drift and makes each delivered behavior auditable.
 
-### III. Test-First and Regression Safety
-New behavior must be covered by tests or harness checks before implementation is considered complete. Existing tests are preserved and must not be weakened to accommodate a change. Regression failures are treated as release blockers until corrected.
+### III. Automated Deterministic Testing
+Every functional requirement and measurable acceptance criterion MUST be verifiable by
+automated pytest tests. Tests MUST be deterministic, cover regression behavior, and run
+against the specified CLI and persisted state. A feature is not complete until its applicable
+tests pass.
 
-This keeps change sets small, reviewable, and safe. It also makes future refactors easier because the contract remains explicit.
+Testing is part of delivery, not a substitute for specifying the behavior first.
 
-### IV. Reproducible Automation
-Automation, scripts, and harnesses must be deterministic, versioned, and runnable by any qualified contributor without secret state or one-off local fixes. Setup steps, commands, and dependencies must be documented in the repository or project guidance.
+### IV. Harness Integrity and Evidence Preservation
+Tests, assertions, requirements, lint rules, security checks, and evaluation thresholds MUST
+NOT be deleted, disabled, bypassed, weakened, or silently changed to obtain a PASS result.
+Any approved change to these controls MUST be traceable and explained.
 
-Reproducible automation prevents environment drift, reduces human error, and keeps project outcomes consistent across machines and time.
+Evidence MUST be preserved for the initial generated implementation, harness executions,
+genuine failures, repair feedback, repaired implementation, reruns, and final validation
+results. Records MUST not be altered to conceal failures.
 
-### V. Simplicity, Traceability, and Safe Change
-The project favors the smallest clear solution, explicit ownership, and traceable decisions. Complex work must be justified with a documented rationale, review, or migration plan. Changes that affect interfaces, data contracts, or operational behavior require a clear record of impact and rollback path.
+### V. Reproducible, Secure, and Maintainable Delivery
+Automation and harnesses MUST be deterministic, versioned, and runnable without secret state
+or one-off local fixes. The project MUST favor the smallest clear solution; changes affecting
+interfaces, data contracts, or operational behavior MUST include a traceable impact rationale.
+Credentials, tokens, and environment-specific secrets MUST NOT be committed.
 
-Simplicity improves maintainability, while traceability keeps the team aligned when constraints evolve.
+Reproducible commands and explicit change records reduce environment drift and make the
+project maintainable.
 
-## Security and Quality Standards
+## Technology, Security and Data Integrity
 
-The project must maintain secure, auditable, and maintainable work. Sensitive credentials, tokens, and environment-specific secrets must never be committed to the repository. Inputs and outputs must be validated where they cross boundaries, and unsafe defaults are not allowed.
+Part 1A is a Python 3.13 command-line application using JSON persistence, pytest, Ruff, and
+Bandit. Python code MUST pass Ruff linting and static quality checks and MUST pass Bandit
+security analysis. Security findings MUST be reviewed; suppressing findings solely to obtain a
+passing result is prohibited.
 
-Changes affecting data handling, user interaction, automation, or deployment must be reviewed for security, privacy, and operational risk before release. Critical risks must be documented and mitigated before proceeding.
+Persisted task data MUST use unique task IDs and validate all required fields. Invalid data
+MUST be rejected, and task data MUST remain consistent across application restarts. Inputs
+and outputs at application boundaries MUST be validated. Changes affecting data handling or
+user interaction MUST be reviewed for security and operational risk before acceptance.
 
-## Review and Delivery Workflow
+## Verification, Evidence and Human Review
 
-Every change must be reviewed by a second contributor before merge unless the change is explicitly marked as trivial and low-risk. Reviewers verify specification alignment, test coverage, and risk assessment. Merge-ready work must include a clear summary of intent, validation evidence, and any follow-up actions.
+Every change MUST be reviewed for specification alignment, test coverage, and risk. Unless a
+change is explicitly documented as trivial and low-risk, a second contributor MUST review it
+before merge. Quality gates MUST NOT be bypassed because of urgency; any approved urgent
+exception requires written approval, documentation, and a corrective follow-up plan.
 
-The team must not bypass quality gates because of urgency. When urgent exceptions are necessary, they require explicit approval, documentation, and a corrective follow-up plan.
+Automated harness PASS is necessary evidence but does not constitute final acceptance. A
+human MUST document the final ACCEPT or REJECT decision and its basis after reviewing the
+specification, implementation, harness evidence, and any unresolved findings.
 
 ## Governance
 
-This Constitution governs all project work in this repository. It supersedes local preferences, informal practices, and ad hoc decision-making when those conflict with the rules here. Amendments require a written change proposal, rationale, and evidence of review before adoption.
+This Constitution governs all project work in this repository and supersedes conflicting local
+preferences and informal practices. Amendments require a written change proposal, rationale,
+and review before adoption. The project owner or designated maintainer is responsible for
+enforcement; violations MUST be corrected and material or repeated violations require a
+documented remediation plan.
 
-The project owner or designated maintainer is responsible for enforcing compliance. Any violation of this Constitution must be corrected promptly, and repeated or material violations require a documented remediation plan.
+Constitution versions use semantic versioning: MAJOR for backward-incompatible governance
+changes, MINOR for new principles or materially expanded requirements, and PATCH for
+clarifications or non-semantic refinements. Compliance MUST be reviewed at specification,
+planning, task-generation, implementation, harness-validation, and final-acceptance gates.
+The review outcome and any remediation MUST be documented.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-13
+**Version**: 1.1.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-14
