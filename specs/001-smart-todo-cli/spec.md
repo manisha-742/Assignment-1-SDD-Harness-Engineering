@@ -8,6 +8,12 @@
 
 **Input**: User description: Create a deterministic local command-line task manager with task creation, listing, updates, deletion, tag filtering, priority sorting, controlled status transitions, and JSON persistence.
 
+## Clarifications
+
+### Session 2026-11-14
+
+- Q: If the JSON file is malformed or cannot be read, should the CLI reject the operation with a stable `INVALID_DATA` error and leave the file unchanged? → A: Fail closed, report `INVALID_DATA`, load no tasks, and leave the file unchanged.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Capture and review tasks (Priority: P1)
@@ -99,8 +105,10 @@ rejected transitions leave it unchanged, and remove it by ID.
 
 - **AC-017** Repeating the same valid command against the same starting task state produces
   the same user-visible result and resulting task state.
-- **AC-018** If persisted task data is invalid, missing required fields, or contains duplicate
-  IDs, the system rejects it without silently resetting or partially accepting the collection.
+- **AC-018** If persisted task data is invalid, missing required fields, contains duplicate
+  IDs, or cannot be read as valid JSON, the system rejects it with `INVALID_DATA`, loads no
+  tasks, leaves the file unchanged, and does not silently reset or partially accept the
+  collection.
 - An update, deletion, or status change with an unknown ID returns NOT_FOUND and does not
   modify the collection.
 - An unsupported status or priority is rejected without changing task data.
@@ -140,7 +148,8 @@ rejected transitions leave it unchanged, and remove it by ID.
 - **FR-013**: The system MUST persist task data locally as JSON and preserve every task's ID,
   title, priority, tags, and status, along with the identifier sequence, across application
   restarts. Required fields MUST be validated; invalid or duplicate records MUST be rejected
-  rather than silently discarded.
+  rather than silently discarded. If the file cannot be parsed or read, the system MUST fail
+  closed with `INVALID_DATA`, load no tasks, and leave the file unchanged.
 - **FR-014**: For identical valid inputs and identical persisted task state, the system MUST
   produce identical user-visible results and resulting state changes. Listing, filtering,
   sorting, validation, and status-transition outcomes MUST be deterministic.
