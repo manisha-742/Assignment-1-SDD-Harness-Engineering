@@ -96,7 +96,7 @@
 - [X] T022 Implement `harness/runner.py` to run pytest with per-run JUnit XML, `ruff check .`, `ruff format --check .`, and `bandit -q -r src` in a fixed order; capture command, available commit ID, Python/tool versions, stdout, stderr, per-command exit status, and aggregate PASS/FAIL under a unique `artifacts/harness/` run directory without overwriting prior failures or including secrets/unnecessary user data.
 - [X] T023 Run the full harness and quickstart acceptance scenarios; preserve complete initial/final run evidence and genuine failures under separate `artifacts/harness/` paths, review Bandit findings without suppressing them to force a pass, and retain repair feedback and rerun evidence.
 - [ ] T024 Before merge, have a second contributor review non-trivial changes. Record the reviewer, review outcome, issues found, resolution status, and evidence location in `artifacts/harness/`; keep this review separate from final human acceptance.
-- [ ] T025 After T024, have a human review the specification, changes, all harness evidence, and unresolved findings, then record a separate ACCEPT or REJECT decision with rationale in the final run evidence.
+- [X] T025 After T024, have a human review the specification, changes, all harness evidence, and unresolved findings, then record a separate ACCEPT or REJECT decision with rationale in the final run evidence. The student recorded ACCEPT in `artifacts/final-human-review.md`; T024 remains incomplete because no second contributor was available.
 
 ## Dependencies & Execution Order
 
