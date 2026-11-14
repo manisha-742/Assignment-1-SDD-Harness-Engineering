@@ -1,0 +1,62 @@
+{
+  "run_id": "run-20261114T180550Z-ldgsb7bm",
+  "started_at_utc": "2026-11-14T18:05:50.069894+00:00",
+  "finished_at_utc": "2026-11-14T18:06:27.674111+00:00",
+  "commit_id": "73b101ddb46818ebbb6226b4cda7f29d32ef0c54",
+  "python_version": "3.13.0",
+  "tool_versions": {
+    "pytest": "8.4.2",
+    "ruff": "0.17.5",
+    "bandit": "1.9.4"
+  },
+  "commands": [
+    {
+      "name": "pytest",
+      "command": [
+        "C:\\Users\\MANISHA\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "--junitxml=C:\\Users\\MANISHA\\Documents\\Assignment-1-SDD-Harness-Engineering\\artifacts\\harness\\run-20261114T180550Z-ldgsb7bm\\pytest.xml"
+      ],
+      "returncode": 0,
+      "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.0, pytest-8.4.2, pluggy-1.7.0\nrootdir: C:\\Users\\MANISHA\\Documents\\Assignment-1-SDD-Harness-Engineering\nconfigfile: pyproject.toml\ntestpaths: tests\ncollected 61 items\n\ntests\\contract\\test_cli_capture.py ....                                  [  6%]\ntests\\contract\\test_cli_organization.py ....                             [ 13%]\ntests\\contract\\test_cli_progress_removal.py ...                          [ 18%]\ntests\\integration\\test_harness.py ...                                    [ 22%]\ntests\\integration\\test_organization_acceptance.py ..                     [ 26%]\ntests\\integration\\test_progress_persistence.py ....                      [ 32%]\ntests\\repository\\test_repository.py ..........                           [ 49%]\ntests\\unit\\test_model.py .............                                   [ 70%]\ntests\\unit\\test_organization.py ......                                   [ 80%]\ntests\\unit\\test_progress_removal.py ............                         [100%]\n\n- generated xml file: C:\\Users\\MANISHA\\Documents\\Assignment-1-SDD-Harness-Engineering\\artifacts\\harness\\run-20261114T180550Z-ldgsb7bm\\pytest.xml -\n============================= 61 passed in 36.42s =============================\n",
+      "stderr": ""
+    },
+    {
+      "name": "ruff check",
+      "command": [
+        "ruff",
+        "check",
+        "."
+      ],
+      "returncode": 0,
+      "stdout": "All checks passed!\n",
+      "stderr": ""
+    },
+    {
+      "name": "ruff format",
+      "command": [
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "returncode": 0,
+      "stdout": "43 files already formatted\n",
+      "stderr": ""
+    },
+    {
+      "name": "bandit",
+      "command": [
+        "bandit",
+        "-q",
+        "-r",
+        "src"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "aggregate_status": "PASS"
+}

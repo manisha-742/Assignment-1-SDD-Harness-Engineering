@@ -12,14 +12,14 @@
 
 **Purpose**: Initialize the Python project and quality-tool configuration.
 
-- [ ] T001 Configure Python 3.13 project metadata, `src/` package discovery, pytest, Ruff lint/format rules, and Bandit development tooling in `pyproject.toml`.
-- [ ] T002 [P] Create the `smart_todo` package and command entry-point scaffold in `src/smart_todo/__init__.py` and `src/smart_todo/__main__.py`.
+- [X] T001 Configure Python 3.13 project metadata, `src/` package discovery, pytest, Ruff lint/format rules, and Bandit development tooling in `pyproject.toml`.
+- [X] T002 [P] Create the `smart_todo` package and command entry-point scaffold in `src/smart_todo/__init__.py` and `src/smart_todo/__main__.py`.
 
 ## Phase 2: Foundational
 
 **Purpose**: Provide isolated, deterministic test execution before feature work.
 
-- [ ] T003 Add pytest fixtures in `tests/conftest.py` that run the module CLI from an isolated temporary working directory, capture stdout/stderr and exit status, and never use a developer's real `.smart-todo.json`.
+- [X] T003 Add pytest fixtures in `tests/conftest.py` that run the module CLI from an isolated temporary working directory, capture stdout/stderr and exit status, and never use a developer's real `.smart-todo.json`.
 
 **Checkpoint**: Project scaffold and isolated CLI test support are ready.
 
@@ -33,16 +33,16 @@
 
 ### Tests for User Story 1
 
-- [ ] T004 [P] [US1] Write failing model tests for title trimming/rejection, priority defaults and allowed values, tag validation, and initial TODO status mapped to FR-001, FR-003–FR-005 and AC-001, AC-002, AC-009 in `tests/unit/test_model.py`.
-- [ ] T005 [P] [US1] Write failing repository tests for first-run initialization, full-document validation, round-trip persistence, monotonic `next_id`, and fail-closed corruption mapped to FR-002, FR-013 and AC-016, AC-018, AC-019 in `tests/repository/test_repository.py`. For corrupt or invalid JSON, assert rejection, that no partial task collection is loaded, that the original file remains byte-for-byte unchanged, and that the application does not silently replace or overwrite it.
-- [ ] T006 [P] [US1] Write failing CLI contract tests for add/list arguments, stable result fields, default MEDIUM priority, TODO status, ascending-ID list order, invalid-title rejection, no partial changes, and exactly-once unique-ID listing of 100 tasks mapped to FR-001, FR-004–FR-006, FR-015, AC-001–AC-003, and SC-001 in `tests/contract/test_cli_capture.py`.
+- [X] T004 [P] [US1] Write failing model tests for title trimming/rejection, priority defaults and allowed values, tag validation, and initial TODO status mapped to FR-001, FR-003–FR-005 and AC-001, AC-002, AC-009 in `tests/unit/test_model.py`.
+- [X] T005 [P] [US1] Write failing repository tests for first-run initialization, full-document validation, round-trip persistence, monotonic `next_id`, and fail-closed corruption mapped to FR-002, FR-013 and AC-016, AC-018, AC-019 in `tests/repository/test_repository.py`. For corrupt or invalid JSON, assert rejection, that no partial task collection is loaded, that the original file remains byte-for-byte unchanged, and that the application does not silently replace or overwrite it.
+- [X] T006 [P] [US1] Write failing CLI contract tests for add/list arguments, stable result fields, default MEDIUM priority, TODO status, ascending-ID list order, invalid-title rejection, no partial changes, and exactly-once unique-ID listing of 100 tasks mapped to FR-001, FR-004–FR-006, FR-015, AC-001–AC-003, and SC-001 in `tests/contract/test_cli_capture.py`.
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Implement task types, closed priority/status values, and validation in `src/smart_todo/model.py`; preserve these data-model constraints verbatim: ID is a “positive integer”, “Unique within the collection; allocated from the persisted increasing sequence; stable across updates and restarts; never reused after deletion”; title is “Required; reject empty or whitespace-only input; trim outer whitespace before storing”; priority is “Exactly `LOW`, `MEDIUM`, or `HIGH`; new tasks default to `MEDIUM`”; tags are “Zero or more; each trimmed, non-empty, case-sensitive; duplicate tags on one task rejected; no tags represented by an empty list”; status is “Exactly `TODO`, `IN_PROGRESS`, or `DONE`; new tasks start as `TODO`”.
-- [ ] T008 [US1] Implement the JSON repository in `src/smart_todo/repository.py` for `.smart-todo.json`, persisting `tasks` and `next_id`, validating every record before exposing any tasks, and saving complete mutations through a same-directory temporary file and atomic replacement; a missing file initializes an empty collection, while unreadable, malformed, missing-field, duplicate-ID, invalid-value, or invalid-sequence data returns `INVALID_DATA`, loads no tasks, and leaves the source file byte-for-byte unchanged; write failures return `IO_ERROR` without claiming success or replacing valid prior data.
-- [ ] T009 [US1] Implement create and default-list operations in `src/smart_todo/service.py`: allocate the next positive ID only for a valid create, default omitted priority to MEDIUM, set new status to TODO, and list each task once in ascending ID order.
-- [ ] T010 [US1] Implement deterministic `add` and `list` command handling in `src/smart_todo/cli.py` and connect it through `src/smart_todo/__main__.py`; emit stable task fields and error identifiers, and ensure invalid input or persisted data is never reported as success.
+- [X] T007 [US1] Implement task types, closed priority/status values, and validation in `src/smart_todo/model.py`; preserve these data-model constraints verbatim: ID is a “positive integer”, “Unique within the collection; allocated from the persisted increasing sequence; stable across updates and restarts; never reused after deletion”; title is “Required; reject empty or whitespace-only input; trim outer whitespace before storing”; priority is “Exactly `LOW`, `MEDIUM`, or `HIGH`; new tasks default to `MEDIUM`”; tags are “Zero or more; each trimmed, non-empty, case-sensitive; duplicate tags on one task rejected; no tags represented by an empty list”; status is “Exactly `TODO`, `IN_PROGRESS`, or `DONE`; new tasks start as `TODO`”.
+- [X] T008 [US1] Implement the JSON repository in `src/smart_todo/repository.py` for `.smart-todo.json`, persisting `tasks` and `next_id`, validating every record before exposing any tasks, and saving complete mutations through a same-directory temporary file and atomic replacement; a missing file initializes an empty collection, while unreadable, malformed, missing-field, duplicate-ID, invalid-value, or invalid-sequence data returns `INVALID_DATA`, loads no tasks, and leaves the source file byte-for-byte unchanged; write failures return `IO_ERROR` without claiming success or replacing valid prior data.
+- [X] T009 [US1] Implement create and default-list operations in `src/smart_todo/service.py`: allocate the next positive ID only for a valid create, default omitted priority to MEDIUM, set new status to TODO, and list each task once in ascending ID order.
+- [X] T010 [US1] Implement deterministic `add` and `list` command handling in `src/smart_todo/cli.py` and connect it through `src/smart_todo/__main__.py`; emit stable task fields and error identifiers, and ensure invalid input or persisted data is never reported as success.
 
 **Checkpoint**: User Story 1 is independently usable and its pytest tests pass.
 
@@ -56,14 +56,14 @@
 
 ### Tests for User Story 2
 
-- [ ] T011 [P] [US2] Write failing service tests for partial-field updates, preservation of unspecified fields, atomic rejection of invalid title/priority/tag values, exact case-sensitive tag filtering, empty filter results, and HIGH/MEDIUM/LOW sorting with ascending-ID ties mapped to FR-007, FR-009, FR-010 and AC-002, AC-004, AC-006–AC-009, SC-007 in `tests/unit/test_organization.py`.
-- [ ] T012 [P] [US2] Write failing CLI contract tests for `update ID` and `list --tag TAG [--sort priority]`, including NOT_FOUND, invalid-input errors, stable output, and filter-before-sort behavior mapped to FR-007, FR-009, FR-010, FR-012, FR-015 and AC-005–AC-009 in `tests/contract/test_cli_organization.py`.
-- [ ] T013 [P] [US2] Write failing integration tests that independently verify exact-tag membership, zero-match output, priority order and ID tie-breaks, and identical results from equivalent starting states mapped to AC-006–AC-008, AC-017 and SC-002, SC-003 in `tests/integration/test_organization_acceptance.py`.
+- [X] T011 [P] [US2] Write failing service tests for partial-field updates, preservation of unspecified fields, atomic rejection of invalid title/priority/tag values, exact case-sensitive tag filtering, empty filter results, and HIGH/MEDIUM/LOW sorting with ascending-ID ties mapped to FR-007, FR-009, FR-010 and AC-002, AC-004, AC-006–AC-009, SC-007 in `tests/unit/test_organization.py`.
+- [X] T012 [P] [US2] Write failing CLI contract tests for `update ID` and `list --tag TAG [--sort priority]`, including NOT_FOUND, invalid-input errors, stable output, and filter-before-sort behavior mapped to FR-007, FR-009, FR-010, FR-012, FR-015 and AC-005–AC-009 in `tests/contract/test_cli_organization.py`.
+- [X] T013 [P] [US2] Write failing integration tests that independently verify exact-tag membership, zero-match output, priority order and ID tie-breaks, and identical results from equivalent starting states mapped to AC-006–AC-008, AC-017 and SC-002, SC-003 in `tests/integration/test_organization_acceptance.py`.
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Implement atomic update, exact case-sensitive tag filtering, and optional priority sorting in `src/smart_todo/service.py`; validate all supplied update fields before mutation, use HIGH then MEDIUM then LOW, and break equal-priority ties by ascending ID.
-- [ ] T015 [US2] Implement `update` and `list --tag/--sort` argument handling in `src/smart_todo/cli.py`; report unknown IDs as `NOT_FOUND`, reject invalid values without saving partial changes, and filter before sorting.
+- [X] T014 [US2] Implement atomic update, exact case-sensitive tag filtering, and optional priority sorting in `src/smart_todo/service.py`; validate all supplied update fields before mutation, use HIGH then MEDIUM then LOW, and break equal-priority ties by ascending ID.
+- [X] T015 [US2] Implement `update` and `list --tag/--sort` argument handling in `src/smart_todo/cli.py`; report unknown IDs as `NOT_FOUND`, reject invalid values without saving partial changes, and filter before sorting.
 
 **Checkpoint**: User Stories 1 and 2 work; tests verify update, filter, sort, and rejection behavior.
 
@@ -77,14 +77,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T016 [P] [US3] Write failing service tests for both allowed transitions and rejected same-state, reverse, skipped, and unsupported-status transitions; assert unchanged state on rejection, and cover deletion and NOT_FOUND for status/delete mapped to FR-008, FR-011, FR-012 and AC-010–AC-015, AC-020, SC-007 in `tests/unit/test_progress_removal.py`.
-- [ ] T017 [P] [US3] Write failing CLI contract tests for `status ID STATUS` and `delete ID`, including stable success/error results and unsupported transitions mapped to FR-008, FR-011, FR-012, FR-015 and AC-010–AC-015, AC-020 in `tests/contract/test_cli_progress_removal.py`.
-- [ ] T018 [P] [US3] Write failing integration tests for persisted transition state, deletion across restart, non-reuse of deleted IDs, 10-restart field preservation, and 100-repeat deterministic outcomes mapped to FR-002, FR-013, FR-014 and AC-016, AC-017, AC-019, SC-004–SC-006 in `tests/integration/test_progress_persistence.py`.
+- [X] T016 [P] [US3] Write failing service tests for both allowed transitions and rejected same-state, reverse, skipped, and unsupported-status transitions; assert unchanged state on rejection, and cover deletion and NOT_FOUND for status/delete mapped to FR-008, FR-011, FR-012 and AC-010–AC-015, AC-020, SC-007 in `tests/unit/test_progress_removal.py`.
+- [X] T017 [P] [US3] Write failing CLI contract tests for `status ID STATUS` and `delete ID`, including stable success/error results and unsupported transitions mapped to FR-008, FR-011, FR-012, FR-015 and AC-010–AC-015, AC-020 in `tests/contract/test_cli_progress_removal.py`.
+- [X] T018 [P] [US3] Write failing integration tests for persisted transition state, deletion across restart, non-reuse of deleted IDs, 10-restart field preservation, and 100-repeat deterministic outcomes mapped to FR-002, FR-013, FR-014 and AC-016, AC-017, AC-019, SC-004–SC-006 in `tests/integration/test_progress_persistence.py`.
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Implement status transitions and deletion in `src/smart_todo/service.py`; accept only TODO → IN_PROGRESS and IN_PROGRESS → DONE, reject every other transition without mutation, return NOT_FOUND for unknown IDs, and never decrement or reuse `next_id`.
-- [ ] T020 [US3] Implement `status` and `delete` command handling in `src/smart_todo/cli.py`; persist only successful operations and return deterministic success/error results.
+- [X] T019 [US3] Implement status transitions and deletion in `src/smart_todo/service.py`; accept only TODO → IN_PROGRESS and IN_PROGRESS → DONE, reject every other transition without mutation, return NOT_FOUND for unknown IDs, and never decrement or reuse `next_id`.
+- [X] T020 [US3] Implement `status` and `delete` command handling in `src/smart_todo/cli.py`; persist only successful operations and return deterministic success/error results.
 
 **Checkpoint**: All three stories are independently verified through service, repository, and CLI behavior.
 
@@ -92,9 +92,9 @@
 
 **Purpose**: Provide reproducible quality gates, deterministic harness execution, and immutable run evidence.
 
-- [ ] T021 [P] Write failing tests for fixed command ordering, captured tool versions/commands/stdout/stderr/exit codes, pytest report creation, aggregate PASS/FAIL, and unique non-overwriting evidence directories mapped to constitution principle IV in `tests/integration/test_harness.py`.
-- [ ] T022 Implement `harness/runner.py` to run pytest with per-run JUnit XML, `ruff check .`, `ruff format --check .`, and `bandit -q -r src` in a fixed order; capture command, available commit ID, Python/tool versions, stdout, stderr, per-command exit status, and aggregate PASS/FAIL under a unique `artifacts/harness/` run directory without overwriting prior failures or including secrets/unnecessary user data.
-- [ ] T023 Run the full harness and quickstart acceptance scenarios; preserve complete initial/final run evidence and genuine failures under separate `artifacts/harness/` paths, review Bandit findings without suppressing them to force a pass, and retain repair feedback and rerun evidence.
+- [X] T021 [P] Write failing tests for fixed command ordering, captured tool versions/commands/stdout/stderr/exit codes, pytest report creation, aggregate PASS/FAIL, and unique non-overwriting evidence directories mapped to constitution principle IV in `tests/integration/test_harness.py`.
+- [X] T022 Implement `harness/runner.py` to run pytest with per-run JUnit XML, `ruff check .`, `ruff format --check .`, and `bandit -q -r src` in a fixed order; capture command, available commit ID, Python/tool versions, stdout, stderr, per-command exit status, and aggregate PASS/FAIL under a unique `artifacts/harness/` run directory without overwriting prior failures or including secrets/unnecessary user data.
+- [X] T023 Run the full harness and quickstart acceptance scenarios; preserve complete initial/final run evidence and genuine failures under separate `artifacts/harness/` paths, review Bandit findings without suppressing them to force a pass, and retain repair feedback and rerun evidence.
 - [ ] T024 Before merge, have a second contributor review non-trivial changes. Record the reviewer, review outcome, issues found, resolution status, and evidence location in `artifacts/harness/`; keep this review separate from final human acceptance.
 - [ ] T025 After T024, have a human review the specification, changes, all harness evidence, and unresolved findings, then record a separate ACCEPT or REJECT decision with rationale in the final run evidence.
 
