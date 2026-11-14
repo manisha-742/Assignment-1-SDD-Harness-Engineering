@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-14
 
-**Status**: Draft
+**Status**: Approved for Implementation
 
 **Input**: User description: Create a deterministic local command-line task manager with task creation, listing, updates, deletion, tag filtering, priority sorting, controlled status transitions, and JSON persistence.
 
@@ -191,7 +191,7 @@ rejected transitions leave it unchanged, and remove it by ID.
 | FR-012 | AC-005, AC-013, AC-015 |
 | FR-013 | AC-016, AC-018 |
 | FR-014 | AC-017 |
-| FR-015 | AC-001 through AC-016 |
+| FR-015 | AC-001 through AC-020 |
 
 ## Success Criteria *(mandatory)*
 

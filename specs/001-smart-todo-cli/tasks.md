@@ -34,7 +34,7 @@
 ### Tests for User Story 1
 
 - [ ] T004 [P] [US1] Write failing model tests for title trimming/rejection, priority defaults and allowed values, tag validation, and initial TODO status mapped to FR-001, FR-003–FR-005 and AC-001, AC-002, AC-009 in `tests/unit/test_model.py`.
-- [ ] T005 [P] [US1] Write failing repository tests for first-run initialization, full-document validation, round-trip persistence, monotonic `next_id`, and fail-closed corruption mapped to FR-002, FR-013 and AC-016, AC-018, AC-019 in `tests/repository/test_repository.py`.
+- [ ] T005 [P] [US1] Write failing repository tests for first-run initialization, full-document validation, round-trip persistence, monotonic `next_id`, and fail-closed corruption mapped to FR-002, FR-013 and AC-016, AC-018, AC-019 in `tests/repository/test_repository.py`. For corrupt or invalid JSON, assert rejection, that no partial task collection is loaded, that the original file remains byte-for-byte unchanged, and that the application does not silently replace or overwrite it.
 - [ ] T006 [P] [US1] Write failing CLI contract tests for add/list arguments, stable result fields, default MEDIUM priority, TODO status, ascending-ID list order, invalid-title rejection, no partial changes, and exactly-once unique-ID listing of 100 tasks mapped to FR-001, FR-004–FR-006, FR-015, AC-001–AC-003, and SC-001 in `tests/contract/test_cli_capture.py`.
 
 ### Implementation for User Story 1
@@ -56,7 +56,7 @@
 
 ### Tests for User Story 2
 
-- [ ] T011 [P] [US2] Write failing service tests for partial-field updates, preservation of unspecified fields, atomic rejection of invalid title/priority/tag values, exact case-sensitive tag filtering, empty filter results, and HIGH/MEDIUM/LOW sorting with ascending-ID ties mapped to FR-007, FR-009, FR-010 and AC-002, AC-004, AC-006–AC-009 in `tests/unit/test_organization.py`.
+- [ ] T011 [P] [US2] Write failing service tests for partial-field updates, preservation of unspecified fields, atomic rejection of invalid title/priority/tag values, exact case-sensitive tag filtering, empty filter results, and HIGH/MEDIUM/LOW sorting with ascending-ID ties mapped to FR-007, FR-009, FR-010 and AC-002, AC-004, AC-006–AC-009, SC-007 in `tests/unit/test_organization.py`.
 - [ ] T012 [P] [US2] Write failing CLI contract tests for `update ID` and `list --tag TAG [--sort priority]`, including NOT_FOUND, invalid-input errors, stable output, and filter-before-sort behavior mapped to FR-007, FR-009, FR-010, FR-012, FR-015 and AC-005–AC-009 in `tests/contract/test_cli_organization.py`.
 - [ ] T013 [P] [US2] Write failing integration tests that independently verify exact-tag membership, zero-match output, priority order and ID tie-breaks, and identical results from equivalent starting states mapped to AC-006–AC-008, AC-017 and SC-002, SC-003 in `tests/integration/test_organization_acceptance.py`.
 
@@ -77,7 +77,7 @@
 
 ### Tests for User Story 3
 
-- [ ] T016 [P] [US3] Write failing service tests for both allowed transitions and rejected same-state, reverse, skipped, and unsupported-status transitions; assert unchanged state on rejection, and cover deletion and NOT_FOUND for status/delete mapped to FR-008, FR-011, FR-012 and AC-010–AC-015, AC-020 in `tests/unit/test_progress_removal.py`.
+- [ ] T016 [P] [US3] Write failing service tests for both allowed transitions and rejected same-state, reverse, skipped, and unsupported-status transitions; assert unchanged state on rejection, and cover deletion and NOT_FOUND for status/delete mapped to FR-008, FR-011, FR-012 and AC-010–AC-015, AC-020, SC-007 in `tests/unit/test_progress_removal.py`.
 - [ ] T017 [P] [US3] Write failing CLI contract tests for `status ID STATUS` and `delete ID`, including stable success/error results and unsupported transitions mapped to FR-008, FR-011, FR-012, FR-015 and AC-010–AC-015, AC-020 in `tests/contract/test_cli_progress_removal.py`.
 - [ ] T018 [P] [US3] Write failing integration tests for persisted transition state, deletion across restart, non-reuse of deleted IDs, 10-restart field preservation, and 100-repeat deterministic outcomes mapped to FR-002, FR-013, FR-014 and AC-016, AC-017, AC-019, SC-004–SC-006 in `tests/integration/test_progress_persistence.py`.
 
@@ -94,7 +94,9 @@
 
 - [ ] T021 [P] Write failing tests for fixed command ordering, captured tool versions/commands/stdout/stderr/exit codes, pytest report creation, aggregate PASS/FAIL, and unique non-overwriting evidence directories mapped to constitution principle IV in `tests/integration/test_harness.py`.
 - [ ] T022 Implement `harness/runner.py` to run pytest with per-run JUnit XML, `ruff check .`, `ruff format --check .`, and `bandit -q -r src` in a fixed order; capture command, available commit ID, Python/tool versions, stdout, stderr, per-command exit status, and aggregate PASS/FAIL under a unique `artifacts/harness/` run directory without overwriting prior failures or including secrets/unnecessary user data.
-- [ ] T023 Run the full harness and quickstart acceptance scenarios; preserve complete initial/final run evidence and genuine failures under separate `artifacts/harness/` paths, review Bandit findings without suppressing them to force a pass, and record a human ACCEPT/REJECT decision with rationale in the final run evidence.
+- [ ] T023 Run the full harness and quickstart acceptance scenarios; preserve complete initial/final run evidence and genuine failures under separate `artifacts/harness/` paths, review Bandit findings without suppressing them to force a pass, and retain repair feedback and rerun evidence.
+- [ ] T024 Before merge, have a second contributor review non-trivial changes. Record the reviewer, review outcome, issues found, resolution status, and evidence location in `artifacts/harness/`; keep this review separate from final human acceptance.
+- [ ] T025 After T024, have a human review the specification, changes, all harness evidence, and unresolved findings, then record a separate ACCEPT or REJECT decision with rationale in the final run evidence.
 
 ## Dependencies & Execution Order
 
@@ -105,7 +107,7 @@
 - **User Story 1 (Phase 3)**: Depends on Setup and Foundational; establishes the model, repository, and core create/list workflow.
 - **User Story 2 (Phase 4)**: Depends on User Story 1's model, repository, service, and CLI.
 - **User Story 3 (Phase 5)**: Depends on User Story 1's model and repository; its implementation follows User Story 2 because both extend the same service and CLI modules.
-- **Polish (Phase 6)**: Depends on all desired stories.
+- **Polish (Phase 6)**: Depends on all desired stories. T023 runs the harness and captures evidence; T024 follows for the second-contributor review; T025 follows for final human acceptance.
 
 ### User Story Dependencies
 
@@ -120,7 +122,7 @@
 - Within US2, T011–T013 are parallelizable test files after US1 is complete.
 - Within US3, T016–T018 are parallelizable test files after US1 is complete.
 - US2 and US3 test authoring can be parallelized after US1 because the tests target distinct files; their shared service/CLI implementation tasks should be integrated serially.
-- T021 can be written independently of story implementation, but T022 depends on the specified testable harness behavior; T023 depends on all implementation and test tasks.
+- T021 can be written independently of story implementation, but T022 depends on the specified testable harness behavior; T023 depends on all implementation and test tasks; T024 depends on T023; T025 depends on T024.
 
 ## Parallel Examples
 

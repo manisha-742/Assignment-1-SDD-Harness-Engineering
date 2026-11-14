@@ -117,7 +117,7 @@ Every requirement and acceptance criterion has a planned deterministic pytest as
 | FR-012 | AC-005, AC-013, AC-015 | Service/CLI: update, status, and delete of unknown IDs return NOT_FOUND without changes |
 | FR-013 | AC-016, AC-018 | Repository/integration: round-trip and restart preservation; malformed, unreadable, missing-field, duplicate-ID, or invalid-value files fail closed and remain unchanged; missing file initializes an empty first-run collection |
 | FR-014 | AC-017 | Deterministic contract/integration: same input and state yield identical output and state |
-| FR-015 | AC-001 through AC-016 | CLI contract/integration: required operations are available only through the command-line interface |
+| FR-015 | AC-001 through AC-020 | CLI contract/integration: required operations are available only through the command-line interface |
 
 | Success criterion | Planned verification |
 |---|---|
@@ -135,7 +135,8 @@ Every requirement and acceptance criterion has a planned deterministic pytest as
 2. Preserve the initial generated implementation's complete run evidence under `artifacts/harness/`, including genuine failures, tool versions, and commands. Do not edit or remove failed results.
 3. Give failures to the implementer as repair feedback tied to the requirement/test and captured output.
 4. After repair, rerun the same harness commands and acceptance scenarios; preserve that run separately and retain links to the initial failure and repair.
-5. A human reviews the specification, changes, all harness evidence, and unresolved findings, then records ACCEPT or REJECT with rationale. A harness PASS alone is not acceptance.
+5. Before merge, a second contributor reviews non-trivial changes and records the reviewer, review outcome, issues found, resolution status, and evidence location. This review is separate from final human acceptance.
+6. After the second-contributor review, a human reviews the specification, changes, all harness evidence, and unresolved findings, then records a separate ACCEPT or REJECT decision with rationale. A harness PASS alone is not acceptance.
 
 ## Complexity Tracking
 
