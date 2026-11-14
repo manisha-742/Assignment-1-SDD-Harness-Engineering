@@ -1,20 +1,19 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 -> 1.1.0
+- Version change: 1.1.0 -> 1.2.0
 - Modified principles:
-  - Specification-First -> Requirements Traceability
-  - Evidence-Driven Delivery -> Harness Integrity and Evidence Preservation
-  - Test-First and Regression Safety -> Automated Deterministic Testing
-  - Reproducible Automation -> Deterministic CLI and Controlled Task State
-  - Simplicity, Traceability, and Safe Change -> Reproducible, Secure, and Maintainable Delivery
-- Added sections: Technology, Security and Data Integrity; Verification, Evidence and Human Review
-- Removed sections: Security and Quality Standards; Review and Delivery Workflow (replaced by expanded sections)
+  - None; existing Part 1A principles are preserved unchanged
+- Added sections: Part 1B: Natural-Language Reminder Agent Governance
+- Removed sections: None
 - Follow-up TODOs: None
 -->
 
 # Assignment-1-SDD-Harness-Engineering Constitution
 
 ## Core Principles
+
+Principles I–V below are the completed Part 1A deterministic governance. They remain
+unchanged and continue to govern Part 1A.
 
 ### I. Deterministic CLI and Controlled Task State
 For identical valid inputs and the same persisted state, the Smart Todo CLI MUST produce
@@ -57,6 +56,76 @@ Credentials, tokens, and environment-specific secrets MUST NOT be committed.
 Reproducible commands and explicit change records reduce environment drift and make the
 project maintainable.
 
+### Part 1B: Natural-Language Reminder Agent Governance
+
+The following requirements apply specifically to the non-deterministic Part 1B Natural-Language
+Reminder Agent. They supplement, and MUST NOT remove, weaken, or replace, the completed Part 1A
+governance above.
+
+#### VI. Specification-Driven AI Behaviour
+Before implementation, the approved specification MUST define the intended AI behavior, the
+structured output contract, clarification behavior, safety requirements, invariants,
+semantic-quality expectations, and quantitative evaluation threshold. These requirements
+MUST be testable and MUST guide implementation and evaluation.
+
+#### VII. Structured Output Contract
+Reminder interpretations MUST conform to a documented structured schema. The schema MUST
+define every required field, allowed values, nullability, and validation rules. Outputs that
+do not conform MUST fail structural validation and MUST NOT be treated as valid interpretations.
+
+#### VIII. Clarification Instead of Unsupported Guessing
+When information materially required to create or modify a reminder is missing or ambiguous,
+the agent MUST request clarification rather than inventing critical facts, including unsupported
+dates or times. The approved specification MUST define when clarification is required and how
+it is represented in the output.
+
+#### IX. Property and Invariant Validation
+Every output MUST be checked against deterministic properties and invariants, even when its
+wording legitimately varies. Checks MUST include valid intent, schema conformance, valid date
+and time representations, required fields, consistency between clarification state and output,
+and preservation of the user's requested reminder meaning. Invalid or unsupported values MUST
+not pass because the response is plausible or fluent.
+
+#### X. Semantic Quality Evaluation
+Outputs whose wording may legitimately vary MUST be evaluated against explicit semantic-quality
+criteria. Exact string equality MUST NOT be the sole measure of semantic correctness. The
+criteria MUST assess whether the response correctly represents the request and communicates
+necessary clarification or safety outcomes.
+
+#### XI. Diverse Evaluation Dataset
+The Part 1B evaluation dataset MUST contain at least 15 meaningfully distinct cases, not merely
+trivial paraphrases of one case. It MUST cover normal reminder requests, relative dates or times,
+boundary cases, ambiguous requests, missing required information, malformed inputs, unsupported
+requests, and adversarial or guardrail cases.
+
+#### XII. Three-Layer Evaluation
+Every evaluation run MUST report all three layers: (1) schema and structural validation;
+(2) deterministic property and invariant checks; and (3) semantic or quality evaluation using
+the documented criteria. A run MUST NOT report an overall PASS if a required layer is omitted.
+
+#### XIII. Quantitative Acceptance Threshold
+The evaluation harness MUST calculate reproducible per-case results and an aggregate PASS or
+FAIL against an explicitly documented quantitative acceptance threshold. The threshold and
+scoring method MUST be specified and approved before implementation; evaluation runs MUST record
+their case-level results, aggregate result, and threshold used.
+
+#### XIV. Evaluation Integrity
+Part 1B evaluation cases, validators, scoring criteria, thresholds, safety checks, and required
+properties MUST NOT be deleted, bypassed, weakened, or silently modified merely to obtain PASS.
+Changes to evaluation controls MUST be reviewed, justified, and traceable. A failure MUST NOT be
+manufactured solely to create assignment evidence.
+
+#### XV. Evidence Preservation and Repair
+For Part 1B, the project MUST preserve the initial generated implementation and output, initial
+evaluation results, genuine failures, repair feedback, repaired implementation and output,
+evaluation reruns, and final results. Evidence MUST remain attributable to the corresponding
+implementation and evaluation run and MUST NOT be altered to conceal failures.
+
+#### XVI. Human Accountability
+An automated evaluation PASS is evidence and MUST NOT by itself constitute final acceptance.
+The final human review MUST document ACCEPT or REJECT and identify known limitations and
+residual risks.
+
 ## Technology, Security and Data Integrity
 
 Part 1A is a Python 3.13 command-line application using JSON persistence, pytest, Ruff, and
@@ -94,4 +163,4 @@ clarifications or non-semantic refinements. Compliance MUST be reviewed at speci
 planning, task-generation, implementation, harness-validation, and final-acceptance gates.
 The review outcome and any remediation MUST be documented.
 
-**Version**: 1.1.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-14
+**Version**: 1.2.0 | **Ratified**: 2026-11-13 | **Last Amended**: 2026-11-15
