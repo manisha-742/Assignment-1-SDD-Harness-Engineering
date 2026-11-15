@@ -31,7 +31,7 @@ conditional rules below are enforced by the application validator.
 | `needs_clarification` | boolean | True only for a recognizable supported intent with materially missing or ambiguous information. |
 | `clarification_question` | string or null | Non-empty and focused exactly when clarification is needed; null otherwise. |
 | `target_reminder` | string or null | User-provided description for a resolved reschedule/snooze target; no database lookup or existence claim. Null for create/unsupported or unresolved target. |
-| `snooze_duration_minutes` | positive integer or null | Positive whole minutes for a resolved snooze; null for other intents or unresolved duration. |
+| `snooze_duration_minutes` | integer with minimum 1 or null | Positive whole minutes for a resolved snooze; zero and negative values are invalid. Null is allowed for other intents or an unresolved snooze request requiring clarification. |
 
 ### Cross-field invariants
 
@@ -54,7 +54,7 @@ Each version-controlled JSON case is a synthetic, meaningfully distinct test inp
 
 | Field | Type | Constraints |
 |---|---|---|
-| `case_id` | string | Stable and unique; the initial corpus uses E01–E24. |
+| `case_id` | string | Stable and unique; the initial corpus uses E01–E25. |
 | `input` | string | Natural-language request; may be empty for the empty-input case. |
 | `context` | object | Fixed reference instant, time zone, and locale; never inherited from the host during evaluation. |
 | `expected` | object | Expected intent, task facts, target facts, schedule values/nulls, clarification state, and clarification purpose. |
@@ -62,7 +62,7 @@ Each version-controlled JSON case is a synthetic, meaningfully distinct test inp
 | `safety_assertions` | array | Critical prohibited assumptions or required safe behaviors for Layer 2. |
 | `categories` | array of strings | Coverage labels such as boundary, missing-information, unsupported, or guardrail. |
 
-Every case must include enough expected facts for deterministic checks. The current 24 cases and
+Every case must include enough expected facts for deterministic checks. The current 25 cases and
 their expected outcomes are defined in [spec.md](./spec.md).
 
 ## Evaluation Case Result

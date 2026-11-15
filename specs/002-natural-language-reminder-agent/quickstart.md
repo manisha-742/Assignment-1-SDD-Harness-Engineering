@@ -54,7 +54,7 @@ reminder.
 
 ## Evaluation and evidence
 
-1. Run the fixed version-controlled corpus of at least 24 synthetic cases with the live provider.
+1. Run the fixed version-controlled corpus of at least 25 synthetic cases with the live provider.
    Every case uses its stored reference instant, time zone, and locale.
 2. Review Layer 1 schema/structural and Layer 2 expected-fact/safety results. A failed
    structural or deterministic check is a genuine failure and cannot be bypassed.
@@ -63,7 +63,7 @@ reminder.
    limitation; do not fabricate a second review.
 4. Finalize the run. Expected `PASS` requires 100% Layer 1 and Layer 2 passes, at least
    `ceil(0.85 * case_count)` Layer 3 scores of 8/10 or higher, and zero safety-critical failures.
-   For 24 cases, at least 21 must pass Layer 3.
+   For the initial 25 cases, at least 22 must pass Layer 3.
 5. Preserve each initial, repaired, and rerun result in its own non-overwriting directory under
    `artifacts/reminder-agent/`, including outputs, failure evidence, repair feedback, model and
    context metadata, scores, threshold, and aggregate result.

@@ -66,7 +66,7 @@ cases; no reminder records, concurrent service workload, or persistence lifecycl
 | VIII. Clarification Instead of Unsupported Guessing | Deterministic rules enforce required fields and clarification consistency; unknown critical values remain null. | PASS |
 | IX. Property and Invariant Validation | Per-case task, target, schedule, clarification, and safety facts are checked deterministically. | PASS |
 | X. Semantic Quality Evaluation | A human applies the five-criterion 10-point rubric; wording is not compared by exact string alone. | PASS |
-| XI. Diverse Evaluation Dataset | The version-controlled benchmark retains the 24 specified cases and may grow only with meaningful cases. | PASS |
+| XI. Diverse Evaluation Dataset | The version-controlled benchmark retains the 25 specified cases and may grow only with meaningful cases. | PASS |
 | XII. Three-Layer Evaluation | Every run records structural, deterministic, and semantic evaluation. | PASS |
 | XIII. Quantitative Acceptance Threshold | Aggregate calculation is fixed at 100% Layer 1, 100% Layer 2, at least 85% Layer 3 case scores of 8/10 or higher (round up), and zero safety-critical failures. | PASS |
 | XIV. Evaluation Integrity | No case, validator, threshold, or safety property is bypassed or weakened to obtain PASS. | PASS |
@@ -131,7 +131,7 @@ into design:
 
 ### Evaluation and evidence
 
-- Store the full evaluation dataset in version-controlled JSON with stable case IDs, text,
+- Store the full 25-case evaluation dataset in version-controlled JSON with stable case IDs, text,
   fixed context, expected intent/task/target/schedule/clarification facts, permitted normalized
   wording variants, and safety assertions. Keep at least 24 meaningfully distinct cases.
 - Layer 1 validates JSON and the exact schema. Layer 2 compares each output to that case's
@@ -139,7 +139,7 @@ into design:
   scores and reasons; a second reviewer adjudicates disputed scores when available. If no
   second reviewer is available, mark that fact and any unresolved dispute honestly.
 - The aggregate evaluator reports PASS only if all three threshold conditions in FR-019 hold.
-  For 24 cases, the 85% semantic requirement means at least 21 cases score 8/10 or higher.
+  For the initial 25 cases, the 85% semantic requirement means at least 22 cases score 8/10 or higher.
 - Each run receives a unique directory. Preserve the dataset version, code revision, model,
   request settings, fixed contexts, captured outputs, layer results, human score records,
   aggregate result, and failure/repair links. Never overwrite initial failures or store API keys.
@@ -205,7 +205,7 @@ No database, service layer for persistence, frontend, or deployment project is i
 
 ## Test Strategy and Traceability
 
-All automated tests use a fixed context and a stubbed provider. The 24-case live run is a
+All automated tests use a fixed context and a stubbed provider. The 25-case live run is a
 separate, explicit operation; rerunning captured outputs and validators does not require the
 provider or repeat model generation.
 
@@ -216,10 +216,10 @@ provider or repeat model generation.
 | FR-007–FR-008 | Unit tests for target identification, reschedule full resulting schedule, snooze target/duration, and reference-time calculation. |
 | FR-009–FR-010 | Contract tests for malformed/unrelated inputs, safe unsupported output, invalid-date clarification, and adversarial instructions. |
 | FR-011–FR-014 | Schema/contract tests for exact required keys, enum, types, nullability, additional-key rejection, date/time validation, and clarification consistency. |
-| FR-015 | Dataset integrity test asserts at least 24 unique stable case IDs and required category coverage. |
+| FR-015 | Dataset integrity test asserts at least 25 unique stable case IDs and required category coverage. |
 | FR-016, SC-001–SC-002 | Layer 1 and Layer 2 tests run deterministically over every case using recorded expected task, target, schedule, clarification, and safety facts. |
 | FR-017–FR-018, SC-004 | Scoring-record tests validate five integer criterion scores in 0–2, reasons, designated scorer, dispute/adjudication status, and replayed score records. Human scoring itself is not represented as an automated pass. |
-| FR-019, SC-003 | Aggregation tests cover 24/24 structural and invariant passes, 21/24 semantic passes as the minimum passing count, zero safety-critical failures, and fail cases immediately below every threshold. |
+| FR-019, SC-003 | Aggregation tests cover 25/25 structural and invariant passes, 22/25 semantic passes as the minimum passing count, zero safety-critical failures, and fail cases immediately below every threshold. |
 | FR-020–FR-022, SC-005–SC-006 | Evidence tests assert unique non-overwriting run paths, required evidence metadata, preserved failures/feedback/reruns, and recorded final human decision/limitations. |
 | FR-023 | Scope review confirms all new code/tests/evidence use Part 1B paths and do not modify Part 1A behavior. |
 
