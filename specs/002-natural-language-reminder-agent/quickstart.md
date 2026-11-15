@@ -1,35 +1,41 @@
 # Quickstart: Natural-Language Reminder Agent
 
-This is the planned validation guide for [contracts/cli.md](./contracts/cli.md). It documents
-the future setup and expected outcomes; it does not implement the application.
+## Prerequisites and setup
 
-## Prerequisites
+- Python 3.13.
+- Install the project and development dependencies from the repository root:
 
-- Python 3.13 and the repository's development environment.
-- Runtime dependencies: OpenAI Python SDK, `jsonschema`, and `tzdata`.
-- A hosted-provider API key supplied through a local secret/environment mechanism. Never paste
-  it into source files, JSON cases, test output, or evidence.
-- A configured IANA time zone and locale for normal operation. Evaluation cases provide their
-  own fixed context.
+  ```text
+  python -m pip install -e ".[dev]"
+  ```
 
-Reminder text is sent to the hosted provider. API content is not used for training by default
-according to the provider's current documentation, but abuse-monitoring logs may retain prompts
-and responses for up to 30 days by default. `store=false` does not disable that retention. Use
-only synthetic cases for live evaluation and do not enter sensitive personal reminder content
-unless the user accepts the provider's current data terms.
+- For live interpretation, provide `GROQ_API_KEY` through the process environment or an
+  approved secret manager. The application uses Groq's OpenAI-compatible API at
+  `https://api.groq.com/openai/v1` with model `openai/gpt-oss-20b` by default; optionally set
+  `GROQ_MODEL` to override it. The application does not load `.env` files. Never put a real key
+  in source code, Git, test fixtures, prompts, logs, or evaluation evidence.
+- Configure `REMINDER_TIME_ZONE` with an IANA zone such as `America/Los_Angeles`. Optionally set
+  `REMINDER_LOCALE` for numeric date interpretation and `REMINDER_REFERENCE_INSTANT` to an ISO
+  8601 date-time with a UTC offset for a controlled runtime reference. If the reference instant
+  is omitted, the current system instant is used. Evaluation never reads these runtime settings.
+
+Reminder text, fixed context, and model output are sent to Groq for inference. Groq states that
+inference customer data is not retained by default, but may be temporarily logged for system
+reliability or abuse monitoring for up to 30 days; see [Groq's data policy](https://console.groq.com/docs/your-data).
+The `store=false` request setting does not override the provider's data policy. Use only the
+synthetic, committed evaluation cases for live evaluation; do not enter sensitive personal
+reminder text unless you accept the provider's current data terms.
 
 ## Deterministic validation
 
-Run the Part 1B tests without network access:
+Run Part 1B tests without network access or a real API key:
 
 ```text
 python -m pytest tests/reminder_agent
 ```
 
-Expected: schema, fixed-context, Layer 2, and aggregate tests use local fixtures/stubbed
-provider responses. No API key is required; no model output is generated.
-
-Run the repository quality checks after implementation:
+Tests use fixed contexts and stubbed provider responses. The complete repository quality checks
+are:
 
 ```text
 python -m pytest
@@ -38,38 +44,63 @@ ruff format --check .
 bandit -q -r src
 ```
 
-These existing project checks do not replace the Part 1B three-layer evaluation.
+Automated tests do not replace the live three-layer evaluation or its human semantic review.
 
-## Local interpretation
-
-After implementation and local configuration:
+## Interpret one request
 
 ```text
 python -m reminder_agent interpret "Remind me to submit my assignment tomorrow at 8 PM."
 ```
 
-Expected: one JSON object with `create_reminder`, the action `submit my assignment`, the next
-local calendar date, time `20:00`, and no clarification. The CLI does not persist or send a
-reminder.
+The command writes exactly one JSON object to stdout. Configuration, provider, or response
+failures are reported on stderr with a nonzero exit status. The application interprets the
+request only; it does not persist, schedule, send, or execute a reminder.
 
-## Evaluation and evidence
+## Evaluate and finalize
 
-1. Run the fixed version-controlled corpus of at least 25 synthetic cases with the live provider.
-   Every case uses its stored reference instant, time zone, and locale.
-2. Review Layer 1 schema/structural and Layer 2 expected-fact/safety results. A failed
-   structural or deterministic check is a genuine failure and cannot be bypassed.
-3. The designated human scorer scores all five Layer 3 criteria (0–2 each) and records reasons.
-   A second reviewer adjudicates disputed scores when available. If unavailable, record that
-   limitation; do not fabricate a second review.
-4. Finalize the run. Expected `PASS` requires 100% Layer 1 and Layer 2 passes, at least
-   `ceil(0.85 * case_count)` Layer 3 scores of 8/10 or higher, and zero safety-critical failures.
-   For the initial 25 cases, at least 22 must pass Layer 3.
-5. Preserve each initial, repaired, and rerun result in its own non-overwriting directory under
-   `artifacts/reminder-agent/`, including outputs, failure evidence, repair feedback, model and
-   context metadata, scores, threshold, and aggregate result.
-6. A human records final ACCEPT or REJECT, known limitations, and residual risks after reviewing
-   all evidence. An automated PASS alone is not final acceptance.
+Run only the hash-pinned, version-controlled synthetic corpus:
 
-Exact CLI commands for the evaluation stages are specified in
-[contracts/cli.md](./contracts/cli.md). The dataset and result structures are described in
-[data-model.md](./data-model.md).
+```text
+python -m reminder_agent evaluate --cases tests/data/reminder-evaluation-cases.json
+```
+
+Live evaluation requires `GROQ_API_KEY`. If it is unavailable, the command stops before making
+provider calls or creating evaluation evidence. A successful run creates a unique directory under
+`artifacts/reminder-agent/` containing the dataset, captured outputs or sanitized provider
+errors, fixed contexts, Layer 1 and Layer 2 reports, a human scoring template, and a pending
+human-decision template. The corpus is pinned at 25 cases and cannot be replaced by an arbitrary
+live dataset.
+
+The designated human scorer completes `semantic-review-template.json` and saves the completed
+record as `semantic-review.json` in that run directory. Each of the five rubric criteria needs a
+0–2 score and rationale for every case. For a disputed score, record an actual second review or
+honestly record that a second reviewer was unavailable. Then run:
+
+```text
+python -m reminder_agent finalize --run-dir artifacts/reminder-agent/<run-id>
+```
+
+Finalization computes PASS/FAIL only. It does not decide human ACCEPT/REJECT. The human reviewer
+must separately complete the decision record and document known limitations and residual risks.
+
+To re-run structural and deterministic checks against the captured outputs without calling the
+provider or changing the original run:
+
+```text
+python -m reminder_agent replay --run-dir artifacts/reminder-agent/<run-id>
+```
+
+Aggregate PASS requires 100% Layer 1, 100% Layer 2, at least 85% of Layer 3 scores at 8/10 or
+higher (22 of 25 cases), and zero safety-critical failures. No CLI option can weaken these
+thresholds. Every run directory is unique and evidence files are written without overwriting
+earlier evidence.
+
+For a rerun linked to a genuine failed run, provide both the prior run directory and a file with
+the actual repair guidance:
+
+```text
+python -m reminder_agent evaluate --cases tests/data/reminder-evaluation-cases.json --repair-of artifacts/reminder-agent/<initial-run> --repair-feedback <feedback-file>
+```
+
+The evaluator rejects a repair link without a recorded failure and never changes the dataset,
+expected facts, validators, or thresholds to accommodate a model output.

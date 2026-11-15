@@ -7,7 +7,7 @@
 ## Summary
 
 Build a small, local Python 3.13 command-line application that submits one natural-language
-reminder request to the OpenAI Responses API and returns one schema-constrained JSON
+reminder request to Groq's OpenAI-compatible Responses API and returns one schema-constrained JSON
 interpretation. Use configured local date/time, time zone, and locale in normal operation;
 evaluation cases inject fixed contexts. Keep interpretation, date/time context, clarification,
 schema validation, deterministic invariants, human semantic scoring, aggregate decisions, and
@@ -18,7 +18,7 @@ deterministic pytest suite.
 
 **Language/Version**: Python 3.13
 
-**Primary Dependencies**: OpenAI Python SDK for Responses API structured output; `jsonschema`
+**Primary Dependencies**: OpenAI Python SDK pointed at Groq's Responses API for structured output; `jsonschema`
 for local validation of the published JSON Schema; Python standard library for CLI, JSON,
 date/time, and locale handling; `tzdata` for IANA time-zone rules on Windows. Development
 dependencies follow the existing project: pytest, Ruff, and Bandit.
@@ -41,7 +41,7 @@ environment. The application itself is not deployed as a service.
 failures are reported explicitly and are not converted into successful reminder results.
 
 **Constraints**: Reminder text and reference context are sent to the user-approved hosted
-provider for inference. `OPENAI_API_KEY` is read from the environment and never committed or
+provider for inference. `GROQ_API_KEY` is read from the environment and never committed or
 written to evidence. Disable provider-side response storage where supported, while documenting
 that default abuse-monitoring retention may still apply. No web UI, authentication, cloud
 deployment of the application, database, microservices, Docker, Kubernetes, or unrelated
@@ -84,8 +84,8 @@ explicitly disclosed in this plan.
 See [research.md](./research.md) for sources, alternatives, and rationale. Decisions carried
 into design:
 
-- Use the official OpenAI Python SDK and Responses API with strict JSON Schema output. Use
-  `gpt-4o-mini` as the initial configured model; record the exact model identifier and request
+- Use the OpenAI-compatible Groq API through the OpenAI Python SDK and Responses API with strict
+  JSON Schema output. Use `openai/gpt-oss-20b` as the initial configured model; record the exact model identifier and request
   settings for every live evaluation run.
 - Send no reminder text to a provider during pytest. Live evaluation is opt-in and uses the
   synthetic, version-controlled benchmark.
@@ -103,8 +103,8 @@ into design:
   `smart_todo` package.
 - The CLI accepts one request and returns exactly one JSON object on stdout. It has no tools,
   reminder store, notification capability, or network access beyond its single inference call.
-- Keep the OpenAI client behind a narrow interpreter boundary. Read `OPENAI_API_KEY` from the
-  environment; allow the model identifier to be configured, defaulting to `gpt-4o-mini`.
+- Keep the OpenAI-compatible client behind a narrow interpreter boundary. Read `GROQ_API_KEY`
+  from the environment; allow `GROQ_MODEL` to override the default `openai/gpt-oss-20b` model.
 - Use the Responses API strict JSON Schema response format. Treat provider refusal as a safe
   structured unsupported result only when all unsupported-result invariants pass. Treat network,
   authentication, rate-limit, malformed provider response, and incomplete-response failures as

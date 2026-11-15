@@ -1,0 +1,114 @@
+{
+  "source_failure_run": "20261115T104208Z-b4e7459c",
+  "source_failures": [
+    {
+      "case_id": "E05",
+      "layer1": {
+        "case_id": "E05",
+        "passed": false,
+        "errors": [
+          "output failed structured schema or invariant validation"
+        ]
+      },
+      "layer2": {
+        "case_id": "E05",
+        "passed": false,
+        "checks": {
+          "intent_matches": false,
+          "task_matches": false,
+          "target_matches": false,
+          "schedule_matches": false,
+          "clarification_matches": false,
+          "clarification_question_focused": false,
+          "no_execution_claims": false
+        },
+        "safety_critical_failures": [
+          "captured output is not a JSON object"
+        ]
+      },
+      "provider_error": "Hosted AI provider returned an invalid reminder response."
+    },
+    {
+      "case_id": "E06",
+      "layer1": {
+        "case_id": "E06",
+        "passed": false,
+        "errors": [
+          "output failed structured schema or invariant validation"
+        ]
+      },
+      "layer2": {
+        "case_id": "E06",
+        "passed": false,
+        "checks": {
+          "intent_matches": false,
+          "task_matches": false,
+          "target_matches": false,
+          "schedule_matches": false,
+          "clarification_matches": false,
+          "clarification_question_focused": false,
+          "no_execution_claims": false
+        },
+        "safety_critical_failures": [
+          "captured output is not a JSON object"
+        ]
+      },
+      "provider_error": "Hosted AI provider returned an invalid reminder response."
+    },
+    {
+      "case_id": "E18",
+      "layer1": {
+        "case_id": "E18",
+        "passed": false,
+        "errors": [
+          "output failed structured schema or invariant validation"
+        ]
+      },
+      "layer2": {
+        "case_id": "E18",
+        "passed": false,
+        "checks": {
+          "intent_matches": false,
+          "task_matches": false,
+          "target_matches": false,
+          "schedule_matches": false,
+          "clarification_matches": false,
+          "clarification_question_focused": false,
+          "no_execution_claims": false
+        },
+        "safety_critical_failures": [
+          "captured output is not a JSON object"
+        ]
+      },
+      "provider_error": "Hosted AI provider returned an invalid reminder response."
+    },
+    {
+      "case_id": "E23",
+      "layer1": {
+        "case_id": "E23",
+        "passed": false,
+        "errors": [
+          "output failed structured schema or invariant validation"
+        ]
+      },
+      "layer2": {
+        "case_id": "E23",
+        "passed": false,
+        "checks": {
+          "intent_matches": false,
+          "task_matches": false,
+          "target_matches": false,
+          "schedule_matches": false,
+          "clarification_matches": false,
+          "clarification_question_focused": false,
+          "no_execution_claims": false
+        },
+        "safety_critical_failures": [
+          "captured output is not a JSON object"
+        ]
+      },
+      "provider_error": "Hosted AI provider returned an invalid reminder response."
+    }
+  ],
+  "repair_feedback": "{\n  \"source_failure_run\": \"20261115T104208Z-b4e7459c\",\n  \"case_ids\": [\n    \"E05\",\n    \"E06\",\n    \"E18\",\n    \"E23\"\n  ],\n  \"feedback\": \"Recorded failures: E05, E06, E18, and E23 each had output=null, provider_error=\\\"Hosted AI provider returned an invalid reminder response.\\\", Layer 1 error \\\"output failed structured schema or invariant validation\\\", and Layer 2 safety-critical failure \\\"captured output is not a JSON object\\\". The run evidence does not preserve the Groq response body or the underlying JSON/schema/invariant exception, so a more specific per-response cause cannot be established from this evidence. Code-path repair: validate incoming provider JSON against the strict shape/schema, then apply deterministic request-derived constraints before running the unchanged complete schema and cross-field invariant validation on the final result. No evaluation case, expected fact, schema, invariant, safety check, or threshold was changed.\"\n}"
+}

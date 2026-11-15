@@ -6,18 +6,19 @@
 
 ### Hosted inference provider
 
-**Decision**: Use the official OpenAI Python SDK with the Responses API and strict Structured
-Outputs. Start with `gpt-4o-mini`, which supports Structured Outputs, and record the exact model
-identifier and request settings with every evaluation run. Keep the application itself local;
-the hosted model call is an explicitly approved external dependency.
+**Decision**: Use the official OpenAI Python SDK configured for Groq's OpenAI-compatible API,
+with the Responses API and strict Structured Outputs. Start with `openai/gpt-oss-20b`, which Groq
+documents as supporting strict Structured Outputs, and record the exact model identifier and
+request settings with every evaluation run. Keep the application itself local; the hosted model
+call is an explicitly approved external dependency.
 
 **Rationale**:
 
 - The user approved the hosted API option and can provide an API key securely later.
 - A local CLI calling one hosted inference endpoint avoids deploying an application service or
   requiring users to download and operate a large model.
-- The official Python library supports Python 3.10 and later, including Python 3.13, and the
-  Responses API provides structured output with a JSON Schema contract.
+- Groq documents OpenAI Python client compatibility at
+  `https://api.groq.com/openai/v1`, and supports strict schema-formatted Responses API output.
 - Schema-constrained generation reduces shape errors but does not prove that the interpretation
   is semantically correct. Local Layer 1, Layer 2, and human Layer 3 checks remain mandatory.
 
@@ -25,12 +26,11 @@ the hosted model call is an explicitly approved external dependency.
 
 - The request text, reference context, system instructions, and output are sent to the provider.
   Do not use real sensitive reminders in the version-controlled evaluation corpus.
-- OpenAI's current data-controls documentation says API data is not used for model training by
-  default. Abuse-monitoring logs may contain prompts and responses and are retained for up to
-  30 days by default. This is provider-side retention, not local app persistence.
-- Set the Responses API `store` option to false to avoid application-state storage where the
-  endpoint supports it. This does not disable default abuse-monitoring retention.
-- Read `OPENAI_API_KEY` from the process environment. Never place it in source, test fixtures,
+- Groq states inference customer data is not retained by default; inputs and outputs may be
+  temporarily logged for system reliability or abuse monitoring for up to 30 days.
+- Set the Responses API `store` option to false. This does not change Groq's data handling for
+  reliability and abuse monitoring.
+- Read `GROQ_API_KEY` from the process environment. Never place it in source, test fixtures,
   prompts, logs, or evidence files.
 
 **Alternatives considered**:
@@ -85,9 +85,11 @@ identical wording. If a second reviewer is unavailable, record that limitation h
 
 ## Sources
 
-- OpenAI, [Structured model outputs](https://developers.openai.com/api/docs/guides/structured-outputs) — JSON Schema-constrained output, supported models, and the need to handle refusals, incomplete responses, and errors separately.
-- OpenAI, [Data controls](https://developers.openai.com/api/docs/guides/your-data) — default training and abuse-monitoring retention behavior; `store` and application-state distinctions.
-- OpenAI Python library, [PyPI package metadata](https://pypi.org/project/openai/) — official SDK and Python version support.
+- Groq, [OpenAI compatibility](https://console.groq.com/docs/openai) — configure OpenAI client libraries with the Groq-compatible base URL.
+- Groq, [Responses API](https://console.groq.com/docs/responses-api) — Responses API compatibility, including structured output.
+- Groq, [Structured Outputs](https://console.groq.com/docs/structured-outputs) — supported models, JSON Schema strict mode, and constraints.
+- Groq, [Your Data](https://console.groq.com/docs/your-data) — inference data retention and data controls.
+- OpenAI Python library, [PyPI package metadata](https://pypi.org/project/openai/) — OpenAI-compatible Python client.
 - Python documentation, [`zoneinfo`](https://docs.python.org/3/library/zoneinfo.html) — IANA time-zone behavior and the recommendation to declare `tzdata` for cross-platform use, especially Windows.
 - `jsonschema`, [Schema validation documentation](https://python-jsonschema.readthedocs.io/en/stable/validate/) — validating JSON instances against a reusable schema.
 

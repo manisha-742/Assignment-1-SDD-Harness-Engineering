@@ -10,3 +10,5 @@ build/
 .ruff_cache/
 .coverage
 .smart-todo.json
+.env
+.env.*

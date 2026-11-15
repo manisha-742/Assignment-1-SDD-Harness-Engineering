@@ -7,13 +7,15 @@ reminders.
 
 | Setting | Purpose |
 |---|---|
-| `OPENAI_API_KEY` | Required for live interpretation; read from the process environment and never logged or committed. |
-| `OPENAI_MODEL` | Optional model override; defaults to `gpt-4o-mini`. Record the effective value in each evaluation run. |
+| `GROQ_API_KEY` | Required for live interpretation; read from the process environment and never logged or committed. |
+| `GROQ_MODEL` | Optional model override; defaults to `openai/gpt-oss-20b`. Record the effective value in each evaluation run. |
+| Groq API base URL | `https://api.groq.com/openai/v1`, configured in the OpenAI-compatible Python client. |
 | `REMINDER_TIME_ZONE` | Configured IANA time-zone name for normal runtime context. |
 | `REMINDER_LOCALE` | Configured locale used when interpreting locale-sensitive numeric dates. |
+| `REMINDER_REFERENCE_INSTANT` | Optional ISO 8601 date-time with UTC offset for a controlled runtime reference. If omitted, use the system clock. |
 
 The evaluation runner supplies a fixed reference instant, time zone, and locale from each
-version-controlled case instead of reading host settings.
+hash-verified version-controlled case instead of reading host settings.
 
 ## Interpret a request
 
@@ -35,15 +37,29 @@ python -m reminder_agent interpret "Remind me to submit my assignment tomorrow a
 
 ```text
 python -m reminder_agent evaluate --cases tests/data/reminder-evaluation-cases.json
+python -m reminder_agent evaluate --cases tests/data/reminder-evaluation-cases.json --repair-of artifacts/reminder-agent/<initial-run> --repair-feedback <feedback-file>
+python -m reminder_agent replay --run-dir artifacts/reminder-agent/<run-id>
 python -m reminder_agent finalize --run-dir artifacts/reminder-agent/<run-id>
 ```
 
-`evaluate` uses fixed per-case context, captures one live output per case, runs Layers 1 and 2,
-and creates a unique evidence directory with a semantic-review form. The designated human
-evaluator records the five rubric scores and reasons for each case. A second reviewer records
-adjudication only for disputed scores; if unavailable, the form records that honestly.
-`finalize` validates the review record and computes the aggregate result. A run is not finalized
-until its semantic review is complete.
+`evaluate` accepts only the approved, hash-pinned `tests/data/reminder-evaluation-cases.json`
+corpus, uses fixed per-case contexts, captures one output or sanitized provider error per case,
+runs Layers 1 and 2, and creates a unique evidence directory. It requires `GROQ_API_KEY`; when
+the key is missing, it stops before provider calls or evidence creation. The run directory
+contains the corpus, captured results, layer reports, and templates for human review and the final
+decision. Genuine failed cases are recorded separately. A repair rerun may use `--repair-of` and
+`--repair-feedback` together; the source run must contain an actual recorded failure, and the
+rerun preserves a link to those failures and the supplied feedback. Previous run directories are
+never overwritten.
+
+The designated human evaluator completes `semantic-review-template.json` and saves it as
+`semantic-review.json`, recording five rubric scores and reasons for every case. A second
+reviewer records adjudication only for disputed scores; if unavailable, record that honestly.
+`finalize` validates the review record and computes the aggregate result. It never makes the
+human ACCEPT/REJECT decision, which remains pending for the user.
+
+`replay` reads captured outputs and reruns the deterministic layers offline. It does not call the
+provider or modify the source run; it creates a linked, non-overwriting evidence directory.
 
 The aggregate is `PASS` only when every case passes Layers 1 and 2, at least
 `ceil(0.85 * case_count)` cases score 8/10 or higher in Layer 3, and no safety-critical failure
@@ -54,5 +70,5 @@ the versioned evaluator contract and is not a command-line override.
 
 The application must distinguish configuration, provider, response/schema, and evaluation
 failures in its error records. It must not report a successful JSON interpretation after an
-API error or silently default missing configuration. Detailed exit codes are implementation
-work, but every failure must have a nonzero status and an actionable stderr message.
+API error or silently default missing configuration. Every failure must have a nonzero exit
+status and a sanitized, actionable stderr message.

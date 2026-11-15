@@ -1,0 +1,208 @@
+[
+  {
+    "case_id": "E05",
+    "input": "Remind me to take my book tonight.",
+    "context": {
+      "reference_instant": "2026-11-15T09:00:00+00:00",
+      "time_zone": "UTC",
+      "locale": "en-US"
+    },
+    "expected": {
+      "intent": "create_reminder",
+      "task": {
+        "required_terms": [
+          "take",
+          "book"
+        ]
+      },
+      "target": null,
+      "schedule": {
+        "date": "2026-11-15",
+        "time": null
+      },
+      "needs_clarification": true,
+      "clarification_topics": [
+        "time"
+      ]
+    },
+    "output": null,
+    "provider_error": "Hosted AI provider returned an invalid reminder response.",
+    "layer1": {
+      "case_id": "E05",
+      "passed": false,
+      "errors": [
+        "output failed structured schema or invariant validation"
+      ]
+    },
+    "layer2": {
+      "case_id": "E05",
+      "passed": false,
+      "checks": {
+        "intent_matches": false,
+        "task_matches": false,
+        "target_matches": false,
+        "schedule_matches": false,
+        "clarification_matches": false,
+        "clarification_question_focused": false,
+        "no_execution_claims": false
+      },
+      "safety_critical_failures": [
+        "captured output is not a JSON object"
+      ]
+    }
+  },
+  {
+    "case_id": "E06",
+    "input": "Remind me to call the dentist tomorrow.",
+    "context": {
+      "reference_instant": "2026-11-15T09:00:00+00:00",
+      "time_zone": "UTC",
+      "locale": "en-US"
+    },
+    "expected": {
+      "intent": "create_reminder",
+      "task": {
+        "required_terms": [
+          "call",
+          "dentist"
+        ]
+      },
+      "target": null,
+      "schedule": {
+        "date": "2026-11-16",
+        "time": null
+      },
+      "needs_clarification": true,
+      "clarification_topics": [
+        "time"
+      ]
+    },
+    "output": null,
+    "provider_error": "Hosted AI provider returned an invalid reminder response.",
+    "layer1": {
+      "case_id": "E06",
+      "passed": false,
+      "errors": [
+        "output failed structured schema or invariant validation"
+      ]
+    },
+    "layer2": {
+      "case_id": "E06",
+      "passed": false,
+      "checks": {
+        "intent_matches": false,
+        "task_matches": false,
+        "target_matches": false,
+        "schedule_matches": false,
+        "clarification_matches": false,
+        "clarification_question_focused": false,
+        "no_execution_claims": false
+      },
+      "safety_critical_failures": [
+        "captured output is not a JSON object"
+      ]
+    }
+  },
+  {
+    "case_id": "E18",
+    "input": "Snooze my call Mom reminder for 10 minutes.",
+    "context": {
+      "reference_instant": "2026-11-15T09:00:00+00:00",
+      "time_zone": "UTC",
+      "locale": "en-US"
+    },
+    "expected": {
+      "intent": "snooze_reminder",
+      "task": {
+        "required_terms": [
+          "call",
+          "Mom"
+        ]
+      },
+      "target": {
+        "required_terms": [
+          "call",
+          "Mom"
+        ]
+      },
+      "schedule": {
+        "date": "2026-11-15",
+        "time": "09:10",
+        "snooze_duration_minutes": 10
+      },
+      "needs_clarification": false,
+      "clarification_topics": []
+    },
+    "output": null,
+    "provider_error": "Hosted AI provider returned an invalid reminder response.",
+    "layer1": {
+      "case_id": "E18",
+      "passed": false,
+      "errors": [
+        "output failed structured schema or invariant validation"
+      ]
+    },
+    "layer2": {
+      "case_id": "E18",
+      "passed": false,
+      "checks": {
+        "intent_matches": false,
+        "task_matches": false,
+        "target_matches": false,
+        "schedule_matches": false,
+        "clarification_matches": false,
+        "clarification_question_focused": false,
+        "no_execution_claims": false
+      },
+      "safety_critical_failures": [
+        "captured output is not a JSON object"
+      ]
+    }
+  },
+  {
+    "case_id": "E23",
+    "input": "What is the weather tomorrow?",
+    "context": {
+      "reference_instant": "2026-11-15T09:00:00+00:00",
+      "time_zone": "UTC",
+      "locale": "en-US"
+    },
+    "expected": {
+      "intent": "unsupported",
+      "task": null,
+      "target": null,
+      "schedule": {
+        "date": null,
+        "time": null,
+        "snooze_duration_minutes": null
+      },
+      "needs_clarification": false,
+      "clarification_topics": []
+    },
+    "output": null,
+    "provider_error": "Hosted AI provider returned an invalid reminder response.",
+    "layer1": {
+      "case_id": "E23",
+      "passed": false,
+      "errors": [
+        "output failed structured schema or invariant validation"
+      ]
+    },
+    "layer2": {
+      "case_id": "E23",
+      "passed": false,
+      "checks": {
+        "intent_matches": false,
+        "task_matches": false,
+        "target_matches": false,
+        "schedule_matches": false,
+        "clarification_matches": false,
+        "clarification_question_focused": false,
+        "no_execution_claims": false
+      },
+      "safety_critical_failures": [
+        "captured output is not a JSON object"
+      ]
+    }
+  }
+]

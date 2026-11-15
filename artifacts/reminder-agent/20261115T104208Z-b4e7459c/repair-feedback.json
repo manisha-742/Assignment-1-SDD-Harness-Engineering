@@ -1,0 +1,10 @@
+{
+  "source_failure_run": "20261115T104208Z-b4e7459c",
+  "case_ids": [
+    "E05",
+    "E06",
+    "E18",
+    "E23"
+  ],
+  "feedback": "Recorded failures: E05, E06, E18, and E23 each had output=null, provider_error=\"Hosted AI provider returned an invalid reminder response.\", Layer 1 error \"output failed structured schema or invariant validation\", and Layer 2 safety-critical failure \"captured output is not a JSON object\". The run evidence does not preserve the Groq response body or the underlying JSON/schema/invariant exception, so a more specific per-response cause cannot be established from this evidence. Code-path repair: validate incoming provider JSON against the strict shape/schema, then apply deterministic request-derived constraints before running the unchanged complete schema and cross-field invariant validation on the final result. No evaluation case, expected fact, schema, invariant, safety check, or threshold was changed."
+}

@@ -1,0 +1,32 @@
+{
+  "run_id": "20261115T114328Z-4a9f7a70",
+  "started_at": "2026-11-15T11:43:27.307678+00:00",
+  "source_revision": "8607545cfaefeb9b68884a24175b3b691da4e25f",
+  "working_tree_dirty": true,
+  "implementation_sha256": "6840cb96228cbc15c3c08f0b1bdd94813b9f3861fdef9bf04e2f0190344e4774",
+  "dataset_sha256": "3193669b52b0605edb21678119f6a52bb06c8c500e53f73920701f439f64e3b0",
+  "schema_sha256": "9c83084f5d88c5880f724d3c1952c04e8916dca90e75517ae5b1786427b0be54",
+  "case_results_sha256": "50f1969317513b344eec5f05ce3c35d8861dddcb979ee3718b312f4810816a5f",
+  "layer1_sha256": "e8b0ffa8d2c7cf9addcb0a8835583d7c56b922995e4a20fa3bd9866785689956",
+  "layer2_sha256": "65e68846499d3f4630cce1f004d90eb534a4fb0d33b55dc5db18192f9667dff4",
+  "validator_id": "reminder-output-schema-v1",
+  "rubric_id": "human-semantic-rubric-10-point-v1",
+  "provider": "Groq Responses API",
+  "model": "openai/gpt-oss-20b",
+  "request_settings": {
+    "strict_json_schema": true,
+    "store": false
+  },
+  "acceptance_threshold": {
+    "layer1_percent": 100,
+    "layer2_percent": 100,
+    "layer3_percent": 85,
+    "layer3_case_score_minimum": 8,
+    "safety_critical_failures": 0
+  },
+  "aggregate_status": "PENDING_HUMAN_SEMANTIC_REVIEW",
+  "repair_of": "20261115T104208Z-b4e7459c",
+  "layer1_passed": true,
+  "layer2_passed": true,
+  "safety_critical_failure_count": 0
+}
